@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html class="h-full" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <meta content="mobile_tab" name="shell-type"/>
+  <title>CBSE Study - Class 6 Learning App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "on-primary": "#ffffff",
+            "primary-fixed": "#dbe1ff",
+            "secondary": "#855300",
+            "secondary-container": "#fea619",
+            "on-secondary": "#ffffff",
+            "secondary-fixed": "#ffddb8",
+            "tertiary": "#006242",
+            "tertiary-fixed": "#6ffbbe",
+            "surface": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eff4ff",
+            "surface-container": "#e6eeff",
+            "surface-container-high": "#dce9ff",
+            "on-surface": "#0d1c2e",
+            "on-surface-variant": "#434655",
+            "outline": "#737686",
+            "outline-variant": "#c3c6d7",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a"
+          },
+          fontFamily: {
+            "sans": ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @layer base {
+      html, body { width: 100%; margin: 0; padding: 0; min-height: 100%; font-family: 'Plus Jakarta Sans', sans-serif; }
+      body { overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
+      .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+      .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+    }
+    ::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased select-none min-h-screen flex flex-col">
+
+<!-- HEADER -->
+<header class="fixed top-0 w-full z-40 bg-surface/95 backdrop-blur-md pt-safe shadow-sm border-b border-surface-container">
+  <div class="h-16 px-4 flex items-center justify-between gap-2">
+    <div class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary font-extrabold text-lg shadow-sm">
+        6
+      </div>
+      <div class="flex flex-col">
+        <div class="flex items-center gap-1.5">
+          <span class="text-[11px] font-bold text-primary uppercase tracking-wider" id="headerClassBadge">CBSE Class 6</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+          <span class="text-[11px] font-semibold text-on-surface-variant capitalize" id="headerMediumBadge">English</span>
+        </div>
+        <span class="text-sm font-bold text-on-surface leading-tight" id="headerPageTitle">Home</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1 bg-secondary-fixed/40 text-secondary px-2.5 py-1 rounded-full text-xs font-bold">
+        <span class="material-symbols-outlined text-[15px]">local_fire_department</span>
+        <span id="headerStreak">5d</span>
+      </div>
+      <div class="flex items-center gap-1 bg-surface-container px-2.5 py-1 rounded-full text-xs font-bold text-primary">
+        <span class="material-symbols-outlined text-[15px]">stars</span>
+        <span id="headerXp">450 XP</span>
+      </div>
+      <button onclick="switchTab('settings')" class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant active:scale-95" type="button">
+        <span class="material-symbols-outlined text-[18px]">settings</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- TOAST -->
+<div id="appToast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-on-surface text-surface px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-xs font-semibold opacity-0 pointer-events-none transition-all duration-300">
+  <span class="material-symbols-outlined text-[16px] text-secondary-container" id="toastIcon">celebration</span>
+  <span id="toastMsg">Action Successful</span>
+</div>
+
+<!-- ONBOARDING MODAL -->
+<div id="onboardingModal" class="fixed inset-0 z-50 bg-on-surface/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 hidden transition-opacity">
+  <div class="bg-surface-container-lowest w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl flex flex-col gap-4">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary font-bold">
+        <span class="material-symbols-outlined text-[28px]">school</span>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-on-surface">Setup Learning Journey</h2>
+        <p class="text-xs text-on-surface-variant">Class 6 CBSE Curriculum &amp; Games</p>
+      </div>
+    </div>
+
+    <div>
+      <label class="text-xs font-bold text-on-surface mb-1.5 block">Select Class</label>
+      <div class="grid grid-cols-3 gap-2">
+        <button class="p-2.5 rounded-xl bg-primary text-on-primary font-bold text-xs text-center shadow-sm" type="button">Class 6 (Active)</button>
+        <button class="p-2.5 rounded-xl bg-surface-container text-outline text-xs text-center opacity-60" type="button">Class 7 (Soon)</button>
+        <button class="p-2.5 rounded-xl bg-surface-container text-outline text-xs text-center opacity-60" type="button">Class 8 (Soon)</button>
+      </div>
+    </div>
+
+    <div>
+      <label class="text-xs font-bold text-on-surface mb-1.5 block">Select Study Medium</label>
+      <div class="grid grid-cols-2 gap-2">
+        <button id="obMediumEng" onclick="selectObMedium('english')" class="p-3 rounded-xl bg-primary text-on-primary font-bold text-xs flex flex-col items-center gap-1 transition-all" type="button">
+          <span class="material-symbols-outlined text-[20px]">translate</span>
+          <span>English Medium</span>
+        </button>
+        <button id="obMediumHin" onclick="selectObMedium('hindi')" class="p-3 rounded-xl bg-surface-container text-on-surface font-semibold text-xs flex flex-col items-center gap-1 transition-all" type="button">
+          <span class="material-symbols-outlined text-[20px]">menu_book</span>
+          <span>हिंदी माध्यम</span>
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <label class="text-xs font-bold text-on-surface mb-1.5 block">App Interface Language</label>
+      <div class="grid grid-cols-2 gap-2">
+        <button id="obLangEn" onclick="selectObLang('en')" class="p-2.5 rounded-xl bg-primary text-on-primary font-bold text-xs" type="button">English</button>
+        <button id="obLangHi" onclick="selectObLang('hi')" class="p-2.5 rounded-xl bg-surface-container text-on-surface font-semibold text-xs" type="button">हिन्दी (Hindi)</button>
+      </div>
+    </div>
+
+    <button onclick="finishOnboarding()" class="w-full py-3.5 rounded-full bg-primary text-on-primary font-bold text-sm shadow-md active:scale-95 transition-transform flex items-center justify-center gap-2 mt-2" type="button">
+      <span>Get Started / शुरू करें</span>
+      <span class="material-symbols-outlined text-[18px]">rocket_launch</span>
+    </button>
+  </div>
+</div>
+
+<!-- MAIN VIEWPORT -->
+<main class="flex-1 w-full pt-16 pb-24 px-4 max-w-lg mx-auto">
+
+  <!-- ==================== HOME TAB ==================== -->
+  <section id="tabHome" class="flex flex-col gap-4 py-3">
+    <!-- Welcome Card -->
+    <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined text-[24px]">psychology</span>
+        </div>
+        <div>
+          <h1 class="text-base font-bold text-on-surface" id="homeGreeting">Welcome, Scholar!</h1>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary-fixed text-primary">Class 6</span>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary-fixed text-secondary" id="homeMediumBadge">English Med</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col items-end">
+        <span class="text-xs font-bold text-secondary flex items-center gap-0.5">
+          <span class="material-symbols-outlined text-[16px]">stars</span>
+          <span id="homeXpCount">450</span>
+        </span>
+        <span class="text-[10px] text-on-surface-variant font-medium">Total XP</span>
+      </div>
+    </div>
+
+    <!-- Daily Quest Banner -->
+    <div class="p-4 rounded-2xl bg-gradient-to-r from-primary to-primary-container text-on-primary shadow-md flex flex-col gap-2 relative overflow-hidden">
+      <div class="flex items-center justify-between">
+        <span class="text-[10px] font-extrabold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">local_fire_department</span>
+          <span>Daily Challenge</span>
+        </span>
+        <span class="text-xs font-bold text-tertiary-fixed">+50 XP</span>
+      </div>
+      <h2 class="text-sm font-bold leading-tight">Science &amp; Math Multi-Challenge</h2>
+      <p class="text-xs text-on-primary/80">Every session is randomized across the curriculum with zero repeats.</p>
+      <button onclick="launchGameEngine('daily')" class="self-start mt-1 px-4 py-1.5 rounded-full bg-secondary-container text-on-secondary font-bold text-xs flex items-center gap-1 shadow-sm active:scale-95" type="button">
+        <span class="material-symbols-outlined text-[16px]">play_circle</span>
+        <span>Start Daily Quest</span>
+      </button>
+    </div>
+
+    <!-- Quick Action Grid -->
+    <div>
+      <h3 class="text-xs font-bold text-on-surface mb-2 tracking-wide uppercase">Quick Arcade &amp; Study</h3>
+      <div class="grid grid-cols-3 gap-2.5">
+        <button onclick="switchTab('games')" class="p-3 bg-surface-container-lowest rounded-xl flex flex-col items-center text-center shadow-sm border border-surface-container hover:bg-surface-container-low transition-all active:scale-95" type="button">
+          <div class="w-10 h-10 rounded-xl bg-secondary-fixed/50 flex items-center justify-center text-secondary mb-1">
+            <span class="material-symbols-outlined text-[20px]">sports_esports</span>
+          </div>
+          <span class="text-xs font-bold text-on-surface">5 Games</span>
+        </button>
+        <button onclick="switchTab('study')" class="p-3 bg-surface-container-lowest rounded-xl flex flex-col items-center text-center shadow-sm border border-surface-container hover:bg-surface-container-low transition-all active:scale-95" type="button">
+          <div class="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center text-primary mb-1">
+            <span class="material-symbols-outlined text-[20px]">menu_book</span>
+          </div>
+          <span class="text-xs font-bold text-on-surface">Curriculum</span>
+        </button>
+        <button onclick="launchGameEngine('quiz')" class="p-3 bg-surface-container-lowest rounded-xl flex flex-col items-center text-center shadow-sm border border-surface-container hover:bg-surface-container-low transition-all active:scale-95" type="button">
+          <div class="w-10 h-10 rounded-xl bg-tertiary-fixed flex items-center justify-center text-tertiary mb-1">
+            <span class="material-symbols-outlined text-[20px]">quiz</span>
+          </div>
+          <span class="text-xs font-bold text-on-surface">Quiz</span>
+        </button>
+        <button onclick="launchGameEngine('quick_mcq')" class="p-3 bg-surface-container-lowest rounded-xl flex flex-col items-center text-center shadow-sm border border-surface-container hover:bg-surface-container-low transition-all active:scale-95" type="button">
+          <div class="w-10 h-10 rounded-xl bg-secondary-container/20 flex items-center justify-center text-secondary mb-1">
+            <span class="material-symbols-outlined text-[20px]">timer</span>
+          </div>
+          <span class="text-xs font-bold text-on-surface">MCQ Blitz</span>
+        </button>
+        <button onclick="switchTab('progress')" class="p-3 bg-surface-container-lowest rounded-xl flex flex-col items-center text-center shadow-sm border border-surface-container hover:bg-surface-container-low transition-all active:scale-95" type="button">
+          <div class="w-10 h-10 rounded-xl bg-primary-container/20 flex items-center justify-center text-primary-container mb-1">
+            <span class="material-symbols-outlined text-[20px]">insights</span>
+          </div>
+          <span class="text-xs font-bold text-on-surface">Progress</span>
+        </button>
+        <button onclick="switchTab('settings')" class="p-3 bg-surface-container-lowest rounded-xl flex flex-col items-center text-center shadow-sm border border-surface-container hover:bg-surface-container-low transition-all active:scale-95" type="button">
+          <div class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center text-on-surface-variant mb-1">
+            <span class="material-symbols-outlined text-[20px]">settings</span>
+          </div>
+          <span class="text-xs font-bold text-on-surface">Settings</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Class 6 Curriculum Subjects -->
+    <div>
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-xs font-bold text-on-surface tracking-wide uppercase">Class 6 NCERT Subjects</h3>
+        <button onclick="switchTab('study')" class="text-xs font-bold text-primary" type="button">Explore All</button>
+      </div>
+      <div class="flex flex-col gap-2.5" id="homeSubjectsList"></div>
+    </div>
+  </section>
+
+  <!-- ==================== STUDY TAB ==================== -->
+  <section id="tabStudy" class="flex flex-col gap-3 py-3 hidden">
+    <!-- Header / Breadcrumb -->
+    <div class="bg-surface-container-lowest p-3 rounded-2xl shadow-sm border border-surface-container flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <button id="btnStudyBack" onclick="navigateStudyBack()" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface active:scale-95" type="button">
+          <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        </button>
+        <div>
+          <span class="text-[10px] font-bold text-primary uppercase" id="studyBreadcrumbCat">Class 6 Subjects</span>
+          <h2 class="text-sm font-bold text-on-surface leading-tight" id="studyBreadcrumbTitle">All Subjects</h2>
+        </div>
+      </div>
+      <span class="text-xs font-bold bg-surface-container px-2.5 py-1 rounded-full text-primary" id="studyTotalModules">52 Chapters</span>
+    </div>
+
+    <!-- Views -->
+    <div id="studySubjectsContainer" class="flex flex-col gap-2.5"></div>
+    <div id="studyChaptersContainer" class="flex flex-col gap-2.5 hidden"></div>
+    <div id="studyReaderContainer" class="flex flex-col gap-3 hidden"></div>
+  </section>
+
+  <!-- ==================== GAMES TAB ==================== -->
+  <section id="tabGames" class="flex flex-col gap-3 py-3 hidden">
+    <!-- Game Hub -->
+    <div id="gamesHubContainer" class="flex flex-col gap-3">
+      <!-- Target Scope Filter -->
+      <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container flex flex-col gap-2.5">
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm font-bold text-on-surface">Anti-Repeat Game Arcade</h2>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-tertiary-fixed text-tertiary">Fresh Shuffling</span>
+        </div>
+        <p class="text-xs text-on-surface-variant">Every run shuffles questions dynamically without repeats.</p>
+
+        <!-- Chapter Filter Pickers -->
+        <div class="p-2.5 rounded-xl bg-surface-container-low flex flex-col gap-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-primary">Focus Chapter Target:</span>
+            <span id="activeFilterBadge" class="text-on-surface-variant font-medium">All Subjects</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <select id="gameSubjectSelect" onchange="onGameSubjectChange()" class="w-full bg-surface-container-lowest text-xs rounded-xl border border-surface-container p-2 font-medium focus:ring-1 focus:ring-primary focus:outline-none">
+              <option value="all">All Subjects (Mixed)</option>
+              <option value="math">Mathematics</option>
+              <option value="science">Science</option>
+              <option value="english">English</option>
+              <option value="hindi">Hindi</option>
+              <option value="sst">Social Science</option>
+              <option value="sanskrit">Sanskrit</option>
+            </select>
+            <select id="gameChapterSelect" onchange="onGameChapterChange()" class="w-full bg-surface-container-lowest text-xs rounded-xl border border-surface-container p-2 font-medium focus:ring-1 focus:ring-primary focus:outline-none">
+              <option value="all">All Chapters</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 Games Cards -->
+      <!-- Game 1 -->
+      <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border-l-4 border-l-primary border border-surface-container flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-primary-fixed flex items-center justify-center text-primary">
+              <span class="material-symbols-outlined text-[20px]">assignment</span>
+            </div>
+            <div>
+              <h3 class="text-xs font-bold text-on-surface">Game 1: Quiz Challenge</h3>
+              <p class="text-[11px] text-on-surface-variant">4-choice questions with explanations</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-surface-container text-primary">+20 XP</span>
+        </div>
+        <button onclick="launchGameEngine('quiz')" class="w-full py-2.5 rounded-full bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95" type="button">
+          <span class="material-symbols-outlined text-[16px]">play_arrow</span>
+          <span>Start Quiz Challenge</span>
+        </button>
+      </div>
+
+      <!-- Game 2 -->
+      <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border-l-4 border-l-secondary border border-surface-container flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-secondary-fixed flex items-center justify-center text-secondary">
+              <span class="material-symbols-outlined text-[20px]">timer</span>
+            </div>
+            <div>
+              <h3 class="text-xs font-bold text-on-surface">Game 2: Quick MCQ Blitz</h3>
+              <p class="text-[11px] text-on-surface-variant">10-second timer with combo multipliers</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary-fixed/50 text-secondary">+30 XP</span>
+        </div>
+        <button onclick="launchGameEngine('quick_mcq')" class="w-full py-2.5 rounded-full bg-secondary-container text-on-secondary font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95" type="button">
+          <span class="material-symbols-outlined text-[16px]">bolt</span>
+          <span>Start Speed Blitz</span>
+        </button>
+      </div>
+
+      <!-- Game 3 -->
+      <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border-l-4 border-l-tertiary border border-surface-container flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-tertiary-fixed flex items-center justify-center text-tertiary">
+              <span class="material-symbols-outlined text-[20px]">sync_alt</span>
+            </div>
+            <div>
+              <h3 class="text-xs font-bold text-on-surface">Game 3: Match The Pairs</h3>
+              <p class="text-[11px] text-on-surface-variant">Tap-to-pair concepts in Column A with Column B</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-tertiary-fixed/40 text-tertiary">+25 XP</span>
+        </div>
+        <button onclick="launchGameEngine('match')" class="w-full py-2.5 rounded-full bg-tertiary text-on-tertiary font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95" type="button">
+          <span class="material-symbols-outlined text-[16px]">touch_app</span>
+          <span>Play Match Pairs</span>
+        </button>
+      </div>
+
+      <!-- Game 4 -->
+      <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border-l-4 border-l-primary-container border border-surface-container flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-primary-container/20 flex items-center justify-center text-primary-container">
+              <span class="material-symbols-outlined text-[20px]">spellcheck</span>
+            </div>
+            <div>
+              <h3 class="text-xs font-bold text-on-surface">Game 4: Word Spell Challenge</h3>
+              <p class="text-[11px] text-on-surface-variant">Unscramble chapter vocabulary letter-by-letter</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary-fixed text-primary">+25 XP</span>
+        </div>
+        <button onclick="launchGameEngine('word')" class="w-full py-2.5 rounded-full bg-primary-container text-on-primary font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95" type="button">
+          <span class="material-symbols-outlined text-[16px]">extension</span>
+          <span>Play Word Challenge</span>
+        </button>
+      </div>
+
+      <!-- Game 5 -->
+      <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border-l-4 border-l-secondary-container border border-surface-container flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-secondary-fixed flex items-center justify-center text-secondary">
+              <span class="material-symbols-outlined text-[20px]">military_tech</span>
+            </div>
+            <div>
+              <h3 class="text-xs font-bold text-on-surface">Game 5: Daily 3-Task Quest</h3>
+              <p class="text-[11px] text-on-surface-variant">Multi-subject randomized curriculum trio</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary-fixed text-secondary">+50 XP</span>
+        </div>
+        <button onclick="launchGameEngine('daily')" class="w-full py-2.5 rounded-full bg-secondary text-on-secondary font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95" type="button">
+          <span class="material-symbols-outlined text-[16px]">verified</span>
+          <span>Start Daily Quest</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Game Playground -->
+    <div id="gamePlayContainer" class="flex flex-col gap-3 hidden"></div>
+  </section>
+
+  <!-- ==================== PROGRESS TAB ==================== -->
+  <section id="tabProgress" class="flex flex-col gap-3 py-3 hidden">
+    <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container flex flex-col gap-3">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-sm font-bold text-on-surface">Curriculum Mastery</h2>
+          <p class="text-xs text-on-surface-variant">Class 6 CBSE Explorer Stats</p>
+        </div>
+        <span class="text-sm font-extrabold text-primary" id="progressPctLabel">76%</span>
+      </div>
+      <div class="w-full h-2.5 rounded-full bg-surface-container overflow-hidden">
+        <div class="h-full bg-gradient-to-r from-primary to-tertiary rounded-full" style="width: 76%"></div>
+      </div>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <div class="p-2.5 bg-surface-container-low rounded-xl">
+          <span class="text-xs text-on-surface-variant">Total XP</span>
+          <p class="text-base font-bold text-on-surface" id="statProgXp">450</p>
+        </div>
+        <div class="p-2.5 bg-surface-container-low rounded-xl">
+          <span class="text-xs text-on-surface-variant">Streak</span>
+          <p class="text-base font-bold text-on-surface">5 Days</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Badges -->
+    <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container flex flex-col gap-2.5">
+      <h3 class="text-xs font-bold text-on-surface tracking-wide uppercase">Unlocked Scholar Badges</h3>
+      <div class="grid grid-cols-3 gap-2">
+        <div class="p-2 rounded-xl bg-surface-container-low text-center flex flex-col items-center">
+          <span class="material-symbols-outlined text-secondary text-[22px]">explore</span>
+          <span class="text-[11px] font-bold mt-1">Explorer</span>
+        </div>
+        <div class="p-2 rounded-xl bg-surface-container-low text-center flex flex-col items-center">
+          <span class="material-symbols-outlined text-primary text-[22px]">calculate</span>
+          <span class="text-[11px] font-bold mt-1">Math Ace</span>
+        </div>
+        <div class="p-2 rounded-xl bg-surface-container-low text-center flex flex-col items-center">
+          <span class="material-symbols-outlined text-tertiary text-[22px]">science</span>
+          <span class="text-[11px] font-bold mt-1">Science Star</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SETTINGS TAB ==================== -->
+  <section id="tabSettings" class="flex flex-col gap-3 py-3 hidden">
+    <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container flex flex-col gap-1">
+      <h2 class="text-sm font-bold text-on-surface">Academic Settings</h2>
+      <p class="text-xs text-on-surface-variant">Manage Class, Medium, and App Interface language</p>
+    </div>
+
+    <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container flex flex-col gap-2">
+      <label class="text-xs font-bold text-on-surface">Academic Medium (Curriculum &amp; Quizzes)</label>
+      <div class="grid grid-cols-2 gap-2">
+        <button id="setMedEng" onclick="setMedium('english')" class="p-2.5 rounded-xl bg-primary text-on-primary text-xs font-bold transition-all" type="button">English Medium</button>
+        <button id="setMedHin" onclick="setMedium('hindi')" class="p-2.5 rounded-xl bg-surface-container text-on-surface text-xs font-bold transition-all" type="button">हिंदी माध्यम</button>
+      </div>
+    </div>
+
+    <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container flex flex-col gap-2">
+      <label class="text-xs font-bold text-on-surface">App Interface Language</label>
+      <div class="grid grid-cols-2 gap-2">
+        <button id="setLangEn" onclick="setLang('en')" class="p-2.5 rounded-xl bg-primary text-on-primary text-xs font-bold transition-all" type="button">English</button>
+        <button id="setLangHi" onclick="setLang('hi')" class="p-2.5 rounded-xl bg-surface-container text-on-surface text-xs font-bold transition-all" type="button">हिन्दी (Hindi)</button>
+      </div>
+    </div>
+
+    <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container flex flex-col gap-2">
+      <h3 class="text-xs font-bold text-on-surface">Reset &amp; Re-run Setup</h3>
+      <button onclick="showOnboarding(true)" class="py-2.5 rounded-full bg-surface-container text-on-surface font-bold text-xs active:scale-95" type="button">
+        Launch First-Time Setup Wizard
+      </button>
+    </div>
+  </section>
+
+</main>
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="fixed bottom-0 w-full z-40 bg-surface-container-lowest border-t border-surface-container pb-safe">
+  <div class="h-16 flex items-center justify-around max-w-lg mx-auto">
+    <button onclick="switchTab('home')" data-tab="home" class="nav-btn flex flex-col items-center justify-center text-primary font-bold text-[11px] w-14" type="button">
+      <span class="material-symbols-outlined text-[22px]">home</span>
+      <span>Home</span>
+    </button>
+    <button onclick="switchTab('study')" data-tab="study" class="nav-btn flex flex-col items-center justify-center text-on-surface-variant font-medium text-[11px] w-14" type="button">
+      <span class="material-symbols-outlined text-[22px]">menu_book</span>
+      <span>Study</span>
+    </button>
+    <button onclick="switchTab('games')" data-tab="games" class="nav-btn flex flex-col items-center justify-center text-on-surface-variant font-medium text-[11px] w-14" type="button">
+      <span class="material-symbols-outlined text-[22px]">sports_esports</span>
+      <span>Games</span>
+    </button>
+    <button onclick="switchTab('progress')" data-tab="progress" class="nav-btn flex flex-col items-center justify-center text-on-surface-variant font-medium text-[11px] w-14" type="button">
+      <span class="material-symbols-outlined text-[22px]">insights</span>
+      <span>Progress</span>
+    </button>
+    <button onclick="switchTab('settings')" data-tab="settings" class="nav-btn flex flex-col items-center justify-center text-on-surface-variant font-medium text-[11px] w-14" type="button">
+      <span class="material-symbols-outlined text-[22px]">settings</span>
+      <span>Settings</span>
+    </button>
+  </div>
+</nav>
+
+<script>
+/**
+ * CBSE STUDY CLASS 6 - COMPREHENSIVE CURRICULUM & CRYPTO-SEEDED FISHER-YATES ENGINE
+ */
+
+// 1. EXPANDED CURRICULUM DATABASE (52 CHAPTERS)
+const CURRICULUM = [
+  {
+    id: "math",
+    title_en: "Mathematics",
+    title_hi: "गणित",
+    icon: "calculate",
+    chapters: [
+      { id: "math_ch1", num: 1, name_en: "Knowing Our Numbers", name_hi: "अपनी संख्याओं की जानकारी", notes: "1 Crore = 100 Lakhs = 10 Millions. Roman numeral V and L are never repeated." },
+      { id: "math_ch2", num: 2, name_en: "Whole Numbers", name_hi: "पूर्ण संख्याएँ", notes: "0 is the smallest whole number and additive identity. Division by 0 is undefined." },
+      { id: "math_ch3", num: 3, name_en: "Playing with Numbers", name_hi: "संख्याओं के साथ खेलना", notes: "2 is the smallest and only even prime. Product of two numbers = HCF × LCM." },
+      { id: "math_ch4", num: 4, name_en: "Basic Geometrical Ideas", name_hi: "आधारभूत ज्यामितीय अवधारणाएँ", notes: "A point determines location. A line segment has two end points." },
+      { id: "math_ch5", num: 5, name_en: "Understanding Elementary Shapes", name_hi: "प्रारंभिक आकारों को समझना", notes: "Right angle = 90°, straight angle = 180°, complete angle = 360°." },
+      { id: "math_ch6", num: 6, name_en: "Integers", name_hi: "पूर्णांक", notes: "Negative integers lie to the left of 0 on number line. -1 is largest negative integer." },
+      { id: "math_ch7", num: 7, name_en: "Fractions", name_hi: "भिन्न", notes: "Proper fraction numerator < denominator. Equivalent fractions represent the same portion." },
+      { id: "math_ch8", num: 8, name_en: "Decimals", name_hi: "दशमलव", notes: "Tenths place = 1/10; Hundredths place = 1/100." },
+      { id: "math_ch9", num: 9, name_en: "Data Handling", name_hi: "आँकड़ों का प्रबंधन", notes: "Tally marks group frequencies into 5s. Pictograph represents data through pictures." },
+      { id: "math_ch10", num: 10, name_en: "Mensuration", name_hi: "क्षेत्रमिति", notes: "Perimeter of rectangle = 2(L + B). Area of rectangle = L × B." },
+      { id: "math_ch11", num: 11, name_en: "Algebra", name_hi: "बीजगणित", notes: "Letters like x, y represent variables that take different numerical values." },
+      { id: "math_ch12", num: 12, name_en: "Ratio and Proportion", name_hi: "अनुपात और समानुपात", notes: "Equality of two ratios is proportion. Unitary method finds value of one unit first." }
+    ]
+  },
+  {
+    id: "science",
+    title_en: "Science",
+    title_hi: "विज्ञान",
+    icon: "science",
+    chapters: [
+      { id: "sci_ch1", num: 1, name_en: "Components of Food", name_hi: "भोजन के घटक", notes: "Carbohydrates and fats provide energy. Scurvy is caused by Vitamin C deficiency." },
+      { id: "sci_ch2", num: 2, name_en: "Sorting Materials into Groups", name_hi: "वस्तुओं के समूह बनाना", notes: "Metals possess lustre. Soluble substances dissolve completely in water." },
+      { id: "sci_ch3", num: 3, name_en: "Separation of Substances", name_hi: "पदार्थों का पृथक्करण", notes: "Winnowing separates heavier components from lighter husk with wind." },
+      { id: "sci_ch4", num: 4, name_en: "Getting to Know Plants", name_hi: "पौधों को जानिए", notes: "Taproot plants have reticulate venation. Transpiration releases water vapor from leaves." },
+      { id: "sci_ch5", num: 5, name_en: "Body Movements", name_hi: "शरीर में गति", notes: "Ball and socket joint allows 360-degree rotation. Earthworms move by muscle contractions." },
+      { id: "sci_ch6", num: 6, name_en: "The Living Organisms & Surroundings", name_hi: "सजीव एवं उनका परिवेश", notes: "Cactus stems carry out photosynthesis and store water. Pores called stomata enable exchange." },
+      { id: "sci_ch7", num: 7, name_en: "Motion and Measurement of Distances", name_hi: "गति एवं दूरियों का मापन", notes: "SI unit of length is Metre (m). Motion of a pendulum is periodic motion." },
+      { id: "sci_ch8", num: 8, name_en: "Light, Shadows and Reflections", name_hi: "प्रकाश, छायाएँ एवं परावर्तन", notes: "Light travels along a straight line. Shadows require opaque obstacles." },
+      { id: "sci_ch9", num: 9, name_en: "Electricity and Circuits", name_hi: "विद्युत् तथा परिपथ", notes: "An electric cell converts chemical energy into electrical energy." },
+      { id: "sci_ch10", num: 10, name_en: "Fun with Magnets", name_hi: "चुंबकों द्वारा मनोरंजन", notes: "Opposite poles attract, like poles repel. Magnetic compass points North-South." },
+      { id: "sci_ch11", num: 11, name_en: "Air Around Us", name_hi: "हमारे चारों ओर वायु", notes: "Nitrogen forms 78% and Oxygen 21% of dry atmospheric air." }
+    ]
+  },
+  {
+    id: "english",
+    title_en: "English",
+    title_hi: "अंग्रेज़ी",
+    icon: "auto_stories",
+    chapters: [
+      { id: "eng_ch1", num: 1, name_en: "Who Did Patrick's Homework?", name_hi: "पैट्रिक का गृहकार्य किसने किया?", notes: "Patrick transformed into an A-student by reading and doing work himself while guiding the elf." },
+      { id: "eng_ch2", num: 2, name_en: "A House, A Home", name_hi: "एक मकान, एक घर (कविता)", notes: "A house is physical bricks and wood; a home is love, family members, and mutual care." },
+      { id: "eng_ch3", num: 3, name_en: "How the Dog Found Himself a Master", name_hi: "कुत्ते ने स्वामी कैसे पाया", notes: "The dog served wolf, bear, and lion before choosing man as the strongest master on Earth." },
+      { id: "eng_ch4", num: 4, name_en: "The Kite", name_hi: "पतंग (कविता)", notes: "Poem describing the bright flight and ragged flutter of a kite on string." },
+      { id: "eng_ch5", num: 5, name_en: "Taro's Reward", name_hi: "तारो का पुरस्कार", notes: "Taro was rewarded by the emperor of Japan for filial piety and kindness to his aged parents." },
+      { id: "eng_ch6", num: 6, name_en: "Kalpana Chawla: In Space", name_hi: "कल्पना चावला - अंतरिक्ष में", notes: "First Indian-born female astronaut who travelled aboard Space Shuttle Columbia." },
+      { id: "eng_ch7", num: 7, name_en: "Grammar & Vocabulary", name_hi: "अंग्रेज़ी व्याकरण", notes: "Nouns, pronouns, adjectives, subject-verb agreement, and antonym pairs." }
+    ]
+  },
+  {
+    id: "hindi",
+    title_en: "Hindi (हिन्दी)",
+    title_hi: "हिन्दी (वसंत)",
+    icon: "menu_book",
+    chapters: [
+      { id: "hin_ch1", num: 1, name_en: "वह चिड़िया जो", name_hi: "वह चिड़िया जो (कविता)", notes: "कवि: केदारनाथ अग्रवाल। नीले पंखों वाली चिड़िया प्रकृति और संतोषी जीवन का प्रतीक है।" },
+      { id: "hin_ch2", num: 2, name_en: "बचपन", name_hi: "बचपन (कृष्णा सोबती)", notes: "लेखिका शिमला के बचपन की यादों, पुरानी वेशभूषा और आधुनिक अंतर को दर्शाती हैं।" },
+      { id: "hin_ch3", num: 3, name_en: "नादान दोस्त", name_hi: "नादान दोस्त (प्रेमचंद)", notes: "केशव और श्यामा की नादानी से चिड़िया के अंडों का दुखद अंत हुआ।" },
+      { id: "hin_ch4", num: 4, name_en: "चाँद से थोड़ी सी गप्पें", name_hi: "चाँद से थोड़ी सी गप्पें", notes: "कवि शमशेर बहादुर सिंह: छोटी बालिका का घटते-बढ़ते चाँद से संवाद।" },
+      { id: "hin_ch5", num: 5, name_en: "अक्षरों का महत्व", name_hi: "अक्षरों का महत्व", notes: "गुणाकर मुले: अक्षरों की खोज ने मनुष्य को सभ्य और इतिहास को निरंतर बनाया।" },
+      { id: "hin_ch6", num: 6, name_en: "हिंदी व्याकरण", name_hi: "हिंदी व्याकरण", notes: "संज्ञा, सर्वनाम, विशेषण, क्रिया, पर्यायवाची और मुहावरे।" }
+    ]
+  },
+  {
+    id: "sst",
+    title_en: "Social Science",
+    title_hi: "सामाजिक विज्ञान",
+    icon: "public",
+    chapters: [
+      { id: "sst_ch1", num: 1, name_en: "What, Where, How and When? (Hist)", name_hi: "क्या, कब, कहाँ और कैसे? (इतिहास)", notes: "Narmada gatherers, Sulaiman-Kirthar hills, birch bark manuscripts." },
+      { id: "sst_ch2", num: 2, name_en: "From Hunting to Growing Food", name_hi: "आरंभिक मानव: भोजन संग्रह से उत्पादन", notes: "Mehrgarh showed earliest evidence of wheat, barley and cattle rearing." },
+      { id: "sst_ch3", num: 3, name_en: "In the Earliest Cities (Harappa)", name_hi: "आरंभिक नगर (हड़प्पा)", notes: "Great Bath of Mohenjodaro, baked bricks, Harappan drainage system." },
+      { id: "sst_ch4", num: 4, name_en: "What Books & Burials Tell Us", name_hi: "आरंभिक ग्रंथ और कब्रें (वेद)", notes: "Rigveda composed 3500 years ago in Vedic Sanskrit; Megalith burials." },
+      { id: "sst_ch5", num: 5, name_en: "Kingdoms, Kings & Early Republic", name_hi: "राज्य, राजा और प्राचीन गणराज्य", notes: "Magadha rose as the most powerful Mahajanapada; Vajji was a Gana-sangha." },
+      { id: "sst_ch6", num: 6, name_en: "Ashoka: Emperor Who Gave Up War", name_hi: "अशोक: एक अनोखा सम्राट", notes: "Kalinga war transformed Ashoka into follower of Buddhist Dhamma." },
+      { id: "sst_ch7", num: 7, name_en: "The Earth in the Solar System (Geo)", name_hi: "सौरमंडल में पृथ्वी (भूगोल)", notes: "Earth is third planet from Sun, called Blue Planet due to water." },
+      { id: "sst_ch8", num: 8, name_en: "Globe: Latitudes and Longitudes", name_hi: "ग्लोब: अक्षांश एवं देशांतर", notes: "Equator = 0° Latitude. Greenwich meridian = 0° Longitude." },
+      { id: "sst_ch9", num: 9, name_en: "Motions of the Earth", name_hi: "पृथ्वी की गतियां", notes: "Rotation causes day and night; Revolution causes change of seasons." },
+      { id: "sst_ch10", num: 10, name_en: "Maps & Scales", name_hi: "मानचित्र एवं पैमाने", notes: "Three map components: Distance, Direction, and Symbol." },
+      { id: "sst_ch11", num: 11, name_en: "Major Domains of the Earth", name_hi: "पृथ्वी के प्रमुख परिमंडल", notes: "Lithosphere (land), Hydrosphere (water), Atmosphere (air), Biosphere (life)." },
+      { id: "sst_ch12", num: 12, name_en: "Understanding Diversity (Civics)", name_hi: "विविधता की समझ (नागरिक)", notes: "Comparison of Ladakh (cold desert, wool) and Kerala (coast, spices)." },
+      { id: "sst_ch13", num: 13, name_en: "Diversity and Discrimination", name_hi: "विविधता एवं भेदभाव", notes: "Constitution protects equality; Dr. B.R. Ambedkar's contribution." },
+      { id: "sst_ch14", num: 14, name_en: "What is Government?", name_hi: "सरकार क्या है?", notes: "Three tiers of Government in India: Local, State, and National." }
+    ]
+  },
+  {
+    id: "sanskrit",
+    title_en: "Sanskrit (संस्कृतम्)",
+    title_hi: "संस्कृतम् (रुचिरा)",
+    icon: "local_library",
+    chapters: [
+      { id: "san_ch1", num: 1, name_en: "शब्दपरिचयः १ (Masculine)", name_hi: "शब्दपरिचयः १ (पुल्लिङ्ग)", notes: "एषः कः? एषः चषकः। सः सौचिकः। शुनकौ बुक्कतः।" },
+      { id: "san_ch2", num: 2, name_en: "शब्दपरिचयः २ (Feminine)", name_hi: "शब्दपरिचयः २ (स्त्रीलिङ्ग)", notes: "एषा का? एषा दोला। सा घटिका। कोकिले कूजतः।" },
+      { id: "san_ch3", num: 3, name_en: "शब्दपरिचयः ३ (Neuter)", name_hi: "शब्दपरिचयः ३ (नपुंसकलिङ्ग)", notes: "एतत् किम्? एतत् खनित्रम् अस्ति। श्रमिका खनित्रं चालयति।" },
+      { id: "san_ch4", num: 4, name_en: "बकस्य प्रतीकारः", name_hi: "बकस्य प्रतीकारः", notes: "शृगालः बकः च मित्रे आस्ताम्। आत्मदुर्व्यवहारस्य फलं भवति दुःखदम्।" },
+      { id: "san_ch5", num: 5, name_en: "वृक्षाः (कविता)", name_hi: "वृक्षाः", notes: "वने वने निवसन्तो वृक्षाः। वनं वनं रचयन्ति वृक्षाः।" }
+    ]
+  }
+];
+
+// 2. CHAPTER-MAPPED QUESTION POOL
+const QUESTIONS_DB = [
+  // MATH CH 1
+  { id: "m1_1", subject: "math", chapter: "math_ch1", q_en: "How many thousands make one lakh in Indian number system?", q_hi: "भारतीय संख्या प्रणाली में एक लाख में कितने हज़ार होते हैं?", opts_en: ["10", "100", "1,000", "10,000"], opts_hi: ["10", "100", "1,000", "10,000"], ans: 1, exp_en: "1 Lakh = 1,00,000 = 100 × 1,000.", exp_hi: "1 लाख = 100 × 1,000।" },
+  { id: "m1_2", subject: "math", chapter: "math_ch1", q_en: "What is the Roman numeral for 50?", q_hi: "50 के लिए रोमन संख्यांक क्या है?", opts_en: ["X", "L", "C", "D"], opts_hi: ["X", "L", "C", "D"], ans: 1, exp_en: "L represents 50 in Roman system.", exp_hi: "रोमन संख्या पद्धति में L = 50 होता है।" },
+  { id: "m1_3", subject: "math", chapter: "math_ch1", q_en: "Round off 7,584 to the nearest hundred.", q_hi: "7,584 का निकटतम सैकड़े तक सन्निकटित मान क्या होगा?", opts_en: ["7,500", "7,600", "7,580", "8,000"], opts_hi: ["7,500", "7,600", "7,580", "8,000"], ans: 1, exp_en: "Tens digit is 8 (>=5), so rounds up to 7,600.", exp_hi: "दहाई का अंक 8 है, अतः 7,600 होगा।" },
+  { id: "m1_4", subject: "math", chapter: "math_ch1", q_en: "How many millions make one crore?", q_hi: "एक करोड़ में कितने मिलियन होते हैं?", opts_en: ["1", "10", "100", "1,000"], opts_hi: ["1", "10", "100", "1,000"], ans: 1, exp_en: "1 Crore = 10,000,000 = 10 Millions.", exp_hi: "1 करोड़ = 10 मिलियन।" },
+
+  // MATH CH 2
+  { id: "m2_1", subject: "math", chapter: "math_ch2", q_en: "Which whole number does not have a predecessor in whole numbers?", q_hi: "किस पूर्ण संख्या का पूर्ण संख्याओं में कोई पूर्ववर्ती नहीं होता?", opts_en: ["1", "0", "-1", "None"], opts_hi: ["1", "0", "-1", "कोई नहीं"], ans: 1, exp_en: "0 is the smallest whole number.", exp_hi: "0 सबसे छोटी पूर्ण संख्या है।" },
+  { id: "m2_2", subject: "math", chapter: "math_ch2", q_en: "What is the additive identity for whole numbers?", q_hi: "पूर्ण संख्याओं के लिए योज्य तत्समक क्या है?", opts_en: ["1", "0", "-1", "2"], opts_hi: ["1", "0", "-1", "2"], ans: 1, exp_en: "Adding 0 to any number gives the number itself.", exp_hi: "किसी भी संख्या में 0 जोड़ने पर वही संख्या मिलती है।" },
+  { id: "m2_3", subject: "math", chapter: "math_ch2", q_en: "What is the successor of 999?", q_hi: "999 की परवर्ती संख्या क्या है?", opts_en: ["998", "1,000", "1,001", "1,010"], opts_hi: ["998", "1,000", "1,001", "1,010"], ans: 1, exp_en: "999 + 1 = 1,000.", exp_hi: "999 + 1 = 1,000।" },
+
+  // MATH CH 3
+  { id: "m3_1", subject: "math", chapter: "math_ch3", q_en: "What is the only even prime number?", q_hi: "एकमात्र सम अभाज्य संख्या कौन सी है?", opts_en: ["0", "2", "4", "6"], opts_hi: ["0", "2", "4", "6"], ans: 1, exp_en: "2 is the smallest and only even prime.", exp_hi: "2 एकमात्र सम अभाज्य संख्या है।" },
+  { id: "m3_2", subject: "math", chapter: "math_ch3", q_en: "What is the HCF of 12 and 18?", q_hi: "12 और 18 का महत्तम समापवर्तक (HCF) क्या है?", opts_en: ["2", "3", "6", "36"], opts_hi: ["2", "3", "6", "36"], ans: 2, exp_en: "Highest common factor is 6.", exp_hi: "12 और 18 का म.स.प. 6 है।" },
+
+  // SCIENCE CH 1
+  { id: "s1_1", subject: "science", chapter: "sci_ch1", q_en: "Which deficiency causes Scurvy?", q_hi: "किस विटामिन की कमी से स्कर्वी रोग होता है?", opts_en: ["Vitamin A", "Vitamin B1", "Vitamin C", "Vitamin D"], opts_hi: ["विटामिन A", "विटामिन B1", "विटामिन C", "विटामिन D"], ans: 2, exp_en: "Vitamin C deficiency leads to bleeding gums and Scurvy.", exp_hi: "विटामिन C की कमी से मसूड़ों से खून आने लगता है।" },
+  { id: "s1_2", subject: "science", chapter: "sci_ch1", q_en: "Which food component yields the most energy per gram?", q_hi: "भोजन का कौन सा घटक प्रति ग्राम सर्वाधिक ऊर्जा देता है?", opts_en: ["Carbohydrates", "Fats", "Proteins", "Roughage"], opts_hi: ["कार्बोहाइड्रेट", "वसा (Fats)", "प्रोटीन", "आहारी रेशे"], ans: 1, exp_en: "Fats yield twice the energy compared to carbohydrates.", exp_hi: "वसा कार्बोहाइड्रेट से दुगुनी ऊर्जा प्रदान करती है।" },
+  { id: "s1_3", subject: "science", chapter: "sci_ch1", q_en: "Night blindness is caused by deficiency of:", q_hi: "रतौंधी (कम रोशनी में न दिखना) किस विटामिन की कमी से होती है?", opts_en: ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin K"], opts_hi: ["विटामिन A", "विटामिन B", "विटामिन C", "विटामिन K"], ans: 0, exp_en: "Vitamin A deficiency affects eyesight in dark.", exp_hi: "विटामिन A की कमी से आँखों की रोशनी कम होती है।" },
+
+  // SCIENCE CH 3
+  { id: "s3_1", subject: "science", chapter: "sci_ch3", q_en: "Which method uses wind to separate husk from grains?", q_hi: "अनाज से हल्के भूसे को हवा से अलग करने की विधि क्या कहलाती है?", opts_en: ["Threshing", "Winnowing", "Sieving", "Filtration"], opts_hi: ["थ्रेशिंग", "निष्पावन (Winnowing)", "चालन", "निस्यंदन"], ans: 1, exp_en: "Winnowing uses wind currents to separate husk.", exp_hi: "निष्पावन में हवा के झोंकों का उपयोग होता है।" },
+
+  // SCIENCE CH 8
+  { id: "s8_1", subject: "science", chapter: "sci_ch8", q_en: "Materials that allow partial light to pass through are:", q_hi: "वे पदार्थ जो आंशिक प्रकाश को गुजरने देते हैं, कहलाते हैं:", opts_en: ["Transparent", "Translucent", "Opaque", "Luminous"], opts_hi: ["पारदर्शी", "पारभासी (Translucent)", "अपारदर्शी", "दीप्त"], ans: 1, exp_en: "Translucent objects allow partial transmission.", exp_hi: "पारभासी वस्तुएँ आंशिक प्रकाश जाने देती हैं।" },
+
+  // ENGLISH
+  { id: "e1_1", subject: "english", chapter: "eng_ch1", q_en: "Who actually solved Patrick's homework?", q_hi: "पैट्रिक का गृहकार्य वास्तव में किसने पूरा किया?", opts_en: ["The Elf", "His cat", "Patrick himself", "His teacher"], opts_hi: ["बौने (एल्फ) ने", "बिल्ली ने", "स्वयं पैट्रिक ने", "अध्यापक ने"], ans: 2, exp_en: "Patrick studied and looked up every word himself.", exp_hi: "पैट्रिक ने स्वयं शब्दकोश देखकर अभ्यास किया।" },
+  { id: "e6_1", subject: "english", chapter: "eng_ch6", q_en: "Where was astronaut Kalpana Chawla born?", q_hi: "कल्पना चावला का जन्म कहाँ हुआ था?", opts_en: ["Karnal, Haryana", "Jaipur", "Pune", "Delhi"], opts_hi: ["करनाल (हरियाणा)", "जयपुर", "पुणे", "दिल्ली"], ans: 0, exp_en: "She was born in Karnal, Haryana.", exp_hi: "उनका जन्म करनाल में हुआ था।" },
+
+  // HINDI
+  { id: "h1_1", subject: "hindi", chapter: "hin_ch1", q_en: "Who is the poet of 'वह चिड़िया जो'?", q_hi: "'वह चिड़िया जो' कविता के रचयिता कौन हैं?", opts_en: ["Kedarnath Agarwal", "Premchand", "Krishna Sobti", "Shamsher Singh"], opts_hi: ["केदारनाथ अग्रवाल", "मुंशी प्रेमचंद", "कृष्णा सोबती", "शमशेर बहादुर सिंह"], ans: 0, exp_en: "Kedarnath Agarwal composed this poem.", exp_hi: "केदारनाथ अग्रवाल ने यह कविता लिखी है।" },
+  { id: "h3_1", subject: "hindi", chapter: "hin_ch3", q_en: "In 'नादान दोस्त', why did the bird drop her eggs?", q_hi: "'नादान दोस्त' में चिड़िया ने अंडे क्यों गिरा दिए?", opts_en: ["They were rotten", "Human hands touched them", "Wind blew them", "Cat attacked"], opts_hi: ["वे सड़े थे", "इंसानी हाथ छू जाने के कारण", "हवा से गिरे", "बिल्ली ने गिराए"], ans: 1, exp_en: "Birds discard touched eggs as impure.", exp_hi: "इंसानी हाथ छूने पर चिड़िया अंडे त्याग देती है।" },
+
+  // SOCIAL SCIENCE
+  { id: "sst1_1", subject: "sst", chapter: "sst_ch1", q_en: "Ancient manuscripts in India were written on:", q_hi: "प्राचीन पांडुलिपियाँ किस पर लिखी जाती थीं?", opts_en: ["Palm leaves and birch bark", "Paper sheets", "Clay tablets", "Iron sheets"], opts_hi: ["ताड़पत्रों व भोजपत्रों पर", "कागज़ के पन्नों पर", "मिट्टी की पट्टियों पर", "लोहे पर"], ans: 0, exp_en: "Written on palm leaves or bark of birch trees (भोजपत्र).", exp_hi: "ताड़पत्रों और भोजपत्रों पर लिखी जाती थीं।" },
+  { id: "sst7_1", subject: "sst", chapter: "sst_ch7", q_en: "Which planet is called 'Earth's Twin'?", q_hi: "किस ग्रह को 'पृथ्वी का जुड़वां ग्रह' कहा जाता है?", opts_en: ["Mars", "Venus", "Mercury", "Jupiter"], opts_hi: ["मंगल", "शुक्र (Venus)", "बुध", "बृहस्पति"], ans: 1, exp_en: "Venus has similar size and density to Earth.", exp_hi: "शुक्र ग्रह को पृथ्वी का जुड़वां ग्रह कहते हैं।" },
+
+  // SANSKRIT
+  { id: "san1_1", subject: "sanskrit", chapter: "san_ch1", q_en: "What does 'सौचिकः' mean in Sanskrit?", q_hi: "संस्कृत में 'सौचिकः' का क्या अर्थ है?", opts_en: ["Potter", "Tailor", "Farmer", "Teacher"], opts_hi: ["कुम्हार", "दर्जी", "किसान", "शिक्षक"], ans: 1, exp_en: "सौचिकः means tailor who stitches cloth.", exp_hi: "'सौचिकः' का अर्थ दर्जी होता है।" }
+];
+
+// 3. PAIR MATCHING & WORD PUZZLES
+const MATCH_PAIRS_DATA = {
+  en: [
+    { id: "p1", left: "Vitamin C", right: "Scurvy (Bleeding Gums)" },
+    { id: "p2", left: "Zero (0)", right: "Additive Identity" },
+    { id: "p3", left: "Venus", right: "Earth's Twin Planet" },
+    { id: "p4", left: "Translucent", right: "Butter Paper & Frosted Glass" },
+    { id: "p5", left: "Ladakh", right: "Pashmina Wool & Cold Desert" },
+    { id: "p6", left: "Two (2)", right: "Only Even Prime Number" }
+  ],
+  hi: [
+    { id: "p1", left: "विटामिन C", right: "स्कर्वी (मसूड़ों से रक्त)" },
+    { id: "p2", left: "शून्य (0)", right: "योज्य तत्समक" },
+    { id: "p3", left: "शुक्र ग्रह", right: "पृथ्वी का जुड़वां ग्रह" },
+    { id: "p4", left: "पारभासी", right: "बटर पेपर व धुंधला काँच" },
+    { id: "p5", left: "लद्दाख", right: "पश्मीना ऊन व शीत मरुस्थल" },
+    { id: "p6", left: "संख्या 2", right: "एकमात्र सम अभाज्य संख्या" }
+  ]
+};
+
+const WORDS_DATA = [
+  { clue_en: "Disease caused by lack of Vitamin C", clue_hi: "विटामिन C की कमी से होने वाला रोग", word_en: "SCURVY", word_hi: "स्कर्वी" },
+  { clue_en: "The only even prime number", clue_hi: "एकमात्र सम अभाज्य संख्या", word_en: "TWO", word_hi: "दो" },
+  { clue_en: "Natural satellite orbiting the Earth", clue_hi: "पृथ्वी का प्राकृतिक उपग्रह", word_en: "MOON", word_hi: "चंद्रमा" },
+  { clue_en: "Object that attracts iron pieces", clue_hi: "लोहे को आकर्षित करने वाला पदार्थ", word_en: "MAGNET", word_hi: "चुंबक" }
+];
+
+// 4. CRYPTO-SEEDED FISHER-YATES RANDOMIZER (NO FIXED SEED)
+function cryptoRandomShuffle(arr) {
+  const result = [...arr];
+  for (let i = result.length - 1; i > 0; i--) {
+    let rand = Math.random();
+    if (window.crypto && window.crypto.getRandomValues) {
+      const buf = new Uint32Array(1);
+      window.crypto.getRandomValues(buf);
+      rand = buf[0] / (0xFFFFFFFF + 1);
+    }
+    const j = Math.floor(rand * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+// 5. APPLICATION STATE
+const App = {
+  class: "6",
+  medium: "english", // "english" | "hindi"
+  lang: "en",        // "en" | "hi"
+  xp: 450,
+  streak: 5,
+  currentTab: "home",
+  focusSubject: "all",
+  focusChapter: "all"
+};
+
+function initApp() {
+  const savedMed = localStorage.getItem("cbse_med");
+  const savedLang = localStorage.getItem("cbse_lang");
+  const savedXp = localStorage.getItem("cbse_xp");
+
+  if (savedMed) App.medium = savedMed;
+  if (savedLang) App.lang = savedLang;
+  if (savedXp) App.xp = parseInt(savedXp, 10);
+
+  if (!localStorage.getItem("cbse_initialized")) {
+    showOnboarding(true);
+  } else {
+    renderUI();
+  }
+}
+
+function saveApp() {
+  localStorage.setItem("cbse_med", App.medium);
+  localStorage.setItem("cbse_lang", App.lang);
+  localStorage.setItem("cbse_xp", App.xp.toString());
+  localStorage.setItem("cbse_initialized", "true");
+}
+
+function showToast(text, icon = "celebration") {
+  const toast = document.getElementById("appToast");
+  document.getElementById("toastMsg").innerText = text;
+  document.getElementById("toastIcon").innerText = icon;
+  toast.classList.remove("opacity-0", "pointer-events-none");
+  toast.classList.add("opacity-100");
+  setTimeout(() => {
+    toast.classList.remove("opacity-100");
+    toast.classList.add("opacity-0", "pointer-events-none");
+  }, 2200);
+}
+
+function showOnboarding(show) {
+  const m = document.getElementById("onboardingModal");
+  if (show) m.classList.remove("hidden");
+  else m.classList.add("hidden");
+}
+
+function selectObMedium(med) {
+  App.medium = med;
+  document.getElementById("obMediumEng").className = med === 'english' ? "p-3 rounded-xl bg-primary text-on-primary font-bold text-xs flex flex-col items-center gap-1 shadow-sm" : "p-3 rounded-xl bg-surface-container text-on-surface font-semibold text-xs flex flex-col items-center gap-1";
+  document.getElementById("obMediumHin").className = med === 'hindi' ? "p-3 rounded-xl bg-primary text-on-primary font-bold text-xs flex flex-col items-center gap-1 shadow-sm" : "p-3 rounded-xl bg-surface-container text-on-surface font-semibold text-xs flex flex-col items-center gap-1";
+}
+
+function selectObLang(lang) {
+  App.lang = lang;
+  document.getElementById("obLangEn").className = lang === 'en' ? "p-2.5 rounded-xl bg-primary text-on-primary font-bold text-xs" : "p-2.5 rounded-xl bg-surface-container text-on-surface font-semibold text-xs";
+  document.getElementById("obLangHi").className = lang === 'hi' ? "p-2.5 rounded-xl bg-primary text-on-primary font-bold text-xs" : "p-2.5 rounded-xl bg-surface-container text-on-surface font-semibold text-xs";
+}
+
+function finishOnboarding() {
+  saveApp();
+  showOnboarding(false);
+  renderUI();
+  showToast("Setup Completed!", "verified");
+}
+
+function renderUI() {
+  document.getElementById("headerStreak").innerText = App.streak + "d";
+  document.getElementById("headerXp").innerText = App.xp + " XP";
+  document.getElementById("homeXpCount").innerText = App.xp;
+  document.getElementById("statProgXp").innerText = App.xp;
+
+  const isHin = App.medium === "hindi";
+  document.getElementById("headerMediumBadge").innerText = isHin ? "हिंदी" : "English";
+  document.getElementById("homeMediumBadge").innerText = isHin ? "हिंदी माध्यम" : "English Med";
+
+  // Update Settings UI
+  document.getElementById("setMedEng").className = App.medium === 'english' ? "p-2.5 rounded-xl bg-primary text-on-primary text-xs font-bold" : "p-2.5 rounded-xl bg-surface-container text-on-surface text-xs font-bold";
+  document.getElementById("setMedHin").className = App.medium === 'hindi' ? "p-2.5 rounded-xl bg-primary text-on-primary text-xs font-bold" : "p-2.5 rounded-xl bg-surface-container text-on-surface text-xs font-bold";
+  document.getElementById("setLangEn").className = App.lang === 'en' ? "p-2.5 rounded-xl bg-primary text-on-primary text-xs font-bold" : "p-2.5 rounded-xl bg-surface-container text-on-surface text-xs font-bold";
+  document.getElementById("setLangHi").className = App.lang === 'hi' ? "p-2.5 rounded-xl bg-primary text-on-primary text-xs font-bold" : "p-2.5 rounded-xl bg-surface-container text-on-surface text-xs font-bold";
+
+  // Render Home Subjects List
+  const homeList = document.getElementById("homeSubjectsList");
+  homeList.innerHTML = "";
+  CURRICULUM.forEach(sub => {
+    const title = isHin ? sub.title_hi : sub.title_en;
+    const card = document.createElement("div");
+    card.className = "bg-surface-container-lowest p-3.5 rounded-2xl shadow-sm border border-surface-container flex items-center justify-between cursor-pointer hover:bg-surface-container-low transition-all active:scale-[0.99]";
+    card.onclick = () => {
+      switchTab("study");
+      openStudySubject(sub.id);
+    };
+    card.innerHTML = `
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center text-primary font-bold">
+          <span class="material-symbols-outlined text-[20px]">${sub.icon}</span>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-on-surface">${title}</h4>
+          <span class="text-[11px] text-on-surface-variant">${sub.chapters.length} Chapters</span>
+        </div>
+      </div>
+      <span class="material-symbols-outlined text-outline text-[18px]">chevron_right</span>
+    `;
+    homeList.appendChild(card);
+  });
+
+  renderStudySubjectList();
+}
+
+function setMedium(med) {
+  App.medium = med;
+  saveApp();
+  renderUI();
+  showToast(`Switched to ${med === 'hindi' ? 'हिंदी माध्यम' : 'English Medium'}`);
+}
+
+function setLang(lang) {
+  App.lang = lang;
+  saveApp();
+  renderUI();
+  showToast(`Language updated to ${lang === 'hi' ? 'हिन्दी' : 'English'}`);
+}
+
+// 6. TAB SWITCHING
+function switchTab(tabId) {
+  App.currentTab = tabId;
+  ["Home", "Study", "Games", "Progress", "Settings"].forEach(t => {
+    const el = document.getElementById("tab" + t);
+    if (el) el.classList.add("hidden");
+  });
+
+  const active = document.getElementById("tab" + tabId.charAt(0).toUpperCase() + tabId.slice(1));
+  if (active) active.classList.remove("hidden");
+
+  if (tabId === 'games') {
+    document.getElementById("gamesHubContainer").classList.remove("hidden");
+    document.getElementById("gamePlayContainer").classList.add("hidden");
+  }
+
+  const titles = { home: "Home", study: "Study Curriculum", games: "Arcade Games", progress: "My Progress", settings: "Settings" };
+  document.getElementById("headerPageTitle").innerText = titles[tabId] || "Home";
+
+  document.querySelectorAll(".nav-btn").forEach(btn => {
+    const t = btn.getAttribute("data-tab");
+    if (t === tabId) {
+      btn.classList.add("text-primary", "font-bold");
+      btn.classList.remove("text-on-surface-variant", "font-medium");
+    } else {
+      btn.classList.remove("text-primary", "font-bold");
+      btn.classList.add("text-on-surface-variant", "font-medium");
+    }
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// 7. STUDY SECTION LOGIC
+function renderStudySubjectList() {
+  const container = document.getElementById("studySubjectsContainer");
+  container.innerHTML = "";
+  const isHin = App.medium === "hindi";
+
+  CURRICULUM.forEach(sub => {
+    const title = isHin ? sub.title_hi : sub.title_en;
+    const item = document.createElement("div");
+    item.className = "bg-surface-container-lowest p-3.5 rounded-2xl shadow-sm border border-surface-container flex items-center justify-between cursor-pointer hover:bg-surface-container-low transition-all";
+    item.onclick = () => openStudySubject(sub.id);
+    item.innerHTML = `
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-primary-fixed flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined text-[24px]">${sub.icon}</span>
+        </div>
+        <div>
+          <h3 class="text-xs font-bold text-on-surface">${title}</h3>
+          <p class="text-[11px] text-on-surface-variant">${sub.chapters.length} NCERT Modules</p>
+        </div>
+      </div>
+      <span class="material-symbols-outlined text-primary text-[20px]">arrow_forward</span>
+    `;
+    container.appendChild(item);
+  });
+}
+
+function openStudySubject(subId) {
+  const sub = CURRICULUM.find(s => s.id === subId);
+  if (!sub) return;
+
+  document.getElementById("studySubjectsContainer").classList.add("hidden");
+  document.getElementById("studyReaderContainer").classList.add("hidden");
+  const chs = document.getElementById("studyChaptersContainer");
+  chs.classList.remove("hidden");
+
+  const isHin = App.medium === "hindi";
+  document.getElementById("studyBreadcrumbTitle").innerText = isHin ? sub.title_hi : sub.title_en;
+  chs.innerHTML = "";
+
+  sub.chapters.forEach(ch => {
+    const chName = isHin ? ch.name_hi : ch.name_en;
+    const card = document.createElement("div");
+    card.className = "bg-surface-container-lowest p-3.5 rounded-2xl shadow-sm border border-surface-container flex flex-col gap-2.5";
+    card.innerHTML = `
+      <div class="flex items-start gap-2.5">
+        <span class="w-7 h-7 rounded-full bg-primary-fixed text-primary font-bold text-xs flex items-center justify-center flex-shrink-0">
+          ${ch.num}
+        </span>
+        <div>
+          <span class="text-[10px] font-bold text-primary uppercase">Chapter ${ch.num}</span>
+          <h4 class="text-xs font-bold text-on-surface leading-snug">${chName}</h4>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 pt-1">
+        <button class="btn-read flex-1 py-1.5 rounded-full bg-primary text-on-primary text-xs font-bold flex items-center justify-center gap-1 active:scale-95">
+          <span class="material-symbols-outlined text-[14px]">menu_book</span>
+          <span>Notes</span>
+        </button>
+        <button class="btn-quiz flex-1 py-1.5 rounded-full bg-surface-container text-primary text-xs font-bold flex items-center justify-center gap-1 active:scale-95">
+          <span class="material-symbols-outlined text-[14px]">quiz</span>
+          <span>Quiz</span>
+        </button>
+      </div>
+    `;
+
+    card.querySelector(".btn-read").onclick = () => openChapterNotes(ch, sub);
+    card.querySelector(".btn-quiz").onclick = () => {
+      App.focusSubject = sub.id;
+      App.focusChapter = ch.id;
+      document.getElementById("gameSubjectSelect").value = sub.id;
+      populateGameChapterDropdown(sub.id);
+      document.getElementById("gameChapterSelect").value = ch.id;
+      updateFilterBadgeText();
+      switchTab("games");
+      launchGameEngine("quiz");
+    };
+
+    chs.appendChild(card);
+  });
+}
+
+function openChapterNotes(ch, sub) {
+  document.getElementById("studyChaptersContainer").classList.add("hidden");
+  const rdr = document.getElementById("studyReaderContainer");
+  rdr.classList.remove("hidden");
+
+  const isHin = App.medium === "hindi";
+  const chName = isHin ? ch.name_hi : ch.name_en;
+  document.getElementById("studyBreadcrumbTitle").innerText = chName;
+
+  rdr.innerHTML = `
+    <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container flex flex-col gap-3">
+      <div class="flex items-center justify-between">
+        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary-fixed text-primary">Chapter ${ch.num} • Master Notes</span>
+        <span class="text-xs font-bold text-secondary">+15 XP</span>
+      </div>
+      <h3 class="text-sm font-bold text-on-surface">${chName}</h3>
+      <div class="p-3 bg-surface-container-low rounded-xl text-xs text-on-surface leading-relaxed border border-surface-container">
+        ${ch.notes}
+      </div>
+      <button onclick="finishChapterNotes()" class="w-full py-3 rounded-full bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm active:scale-95" type="button">
+        <span class="material-symbols-outlined text-[16px]">check_circle</span>
+        <span>Mark Completed (+15 XP)</span>
+      </button>
+    </div>
+  `;
+}
+
+function finishChapterNotes() {
+  App.xp += 15;
+  saveApp();
+  renderUI();
+  showToast("+15 XP Earned! Notes Finished", "verified");
+  navigateStudyBack();
+}
+
+function navigateStudyBack() {
+  const rdr = document.getElementById("studyReaderContainer");
+  const chs = document.getElementById("studyChaptersContainer");
+  const subs = document.getElementById("studySubjectsContainer");
+
+  if (!rdr.classList.contains("hidden")) {
+    rdr.classList.add("hidden");
+    chs.classList.remove("hidden");
+  } else if (!chs.classList.contains("hidden")) {
+    chs.classList.add("hidden");
+    subs.classList.remove("hidden");
+    document.getElementById("studyBreadcrumbTitle").innerText = "All Subjects";
+  } else {
+    switchTab("home");
+  }
+}
+
+// 8. GAME FILTER CONTROLS & SELECTION
+function onGameSubjectChange() {
+  const sub = document.getElementById("gameSubjectSelect").value;
+  App.focusSubject = sub;
+  populateGameChapterDropdown(sub);
+  App.focusChapter = document.getElementById("gameChapterSelect").value;
+  updateFilterBadgeText();
+}
+
+function onGameChapterChange() {
+  App.focusChapter = document.getElementById("gameChapterSelect").value;
+  updateFilterBadgeText();
+}
+
+function populateGameChapterDropdown(subId) {
+  const chSel = document.getElementById("gameChapterSelect");
+  chSel.innerHTML = `<option value="all">All Chapters</option>`;
+  if (subId === "all") return;
+
+  const found = CURRICULUM.find(s => s.id === subId);
+  if (found) {
+    found.chapters.forEach(ch => {
+      const opt = document.createElement("option");
+      opt.value = ch.id;
+      opt.innerText = `Ch ${ch.num}: ${App.medium === 'hindi' ? ch.name_hi : ch.name_en}`;
+      chSel.appendChild(opt);
+    });
+  }
+}
+
+function updateFilterBadgeText() {
+  const b = document.getElementById("activeFilterBadge");
+  if (App.focusSubject === "all") {
+    b.innerText = "All Subjects (Mixed)";
+  } else {
+    const s = CURRICULUM.find(x => x.id === App.focusSubject);
+    const title = s ? (App.medium === 'hindi' ? s.title_hi : s.title_en) : "";
+    b.innerText = App.focusChapter === "all" ? title : `${title} • Ch Focus`;
+  }
+}
+
+// 9. DYNAMIC FILTER & SHUFFLE ENGINE
+function getShuffledQuestionsForSession(sub = "all", ch = "all", count = 5) {
+  let pool = QUESTIONS_DB.filter(q => {
+    if (sub !== "all" && q.subject !== sub) return false;
+    if (ch !== "all" && q.chapter !== ch) return false;
+    return true;
+  });
+
+  // If pool smaller than desired count, fill from same subject or general pool without duplicating
+  if (pool.length < count) {
+    const others = QUESTIONS_DB.filter(q => !pool.includes(q));
+    pool = [...pool, ...cryptoRandomShuffle(others)];
+  }
+
+  // Shuffle question sequence
+  const picked = cryptoRandomShuffle(pool).slice(0, count);
+
+  // Shuffle answer choices for each question while preserving correct mapping
+  return picked.map(q => {
+    const isHin = App.medium === "hindi";
+    const opts = isHin ? [...q.opts_hi] : [...q.opts_en];
+    const originalAnswerText = opts[q.ans];
+
+    const indexed = opts.map((text, idx) => ({ text, isCorrect: idx === q.ans }));
+    const shuffledOpts = cryptoRandomShuffle(indexed);
+    const newCorrectIndex = shuffledOpts.findIndex(item => item.isCorrect);
+
+    return {
+      ...q,
+      currentOpts: shuffledOpts.map(item => item.text),
+      currentAns: newCorrectIndex,
+      displayQ: isHin ? q.q_hi : q.q_en,
+      displayExp: isHin ? q.exp_hi : q.exp_en
+    };
+  });
+}
+
+// 10. GAME 1: QUIZ CHALLENGE (FRESH SHUFFLE ON EVERY PLAY/RESTART)
+function launchGameEngine(gameType) {
+  if (gameType === 'quiz') startQuizChallenge();
+  else if (gameType === 'quick_mcq') startQuickMcq();
+  else if (gameType === 'match') startMatchPairs();
+  else if (gameType === 'word') startWordChallenge();
+  else if (gameType === 'daily') startDailyChallenge();
+}
+
+function exitActiveGame() {
+  document.getElementById("gamePlayContainer").classList.add("hidden");
+  document.getElementById("gamesHubContainer").classList.remove("hidden");
+}
+
+function startQuizChallenge() {
+  const container = document.getElementById("gamePlayContainer");
+  container.classList.remove("hidden");
+  document.getElementById("gamesHubContainer").classList.add("hidden");
+
+  // Guaranteed fresh random question set
+  const questions = getShuffledQuestionsForSession(App.focusSubject, App.focusChapter, 4);
+  let curIndex = 0;
+  let score = 0;
+
+  function renderQuizQuestion() {
+    const q = questions[curIndex];
+    container.innerHTML = `
+      <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container flex flex-col gap-3.5">
+        <div class="flex items-center justify-between">
+          <button onclick="exitActiveGame()" class="text-xs font-bold text-on-surface-variant flex items-center gap-0.5 active:scale-95" type="button">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            <span>Exit</span>
+          </button>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary-fixed text-primary">
+            Question ${curIndex + 1} of ${questions.length}
+          </span>
+          <span class="text-xs font-bold text-secondary">⭐️ ${score * 10} XP</span>
+        </div>
+
+        <div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+          <div class="h-full bg-primary rounded-full transition-all duration-300" style="width: ${((curIndex + 1) / questions.length) * 100}%"></div>
+        </div>
+
+        <h3 class="text-sm font-bold text-on-surface leading-snug">${q.displayQ}</h3>
+
+        <div class="flex flex-col gap-2" id="quizOptionsList">
+          ${q.currentOpts.map((opt, i) => `
+            <button type="button" data-idx="${i}" class="quiz-opt-btn w-full p-3 rounded-xl bg-surface-container-low text-on-surface text-xs font-semibold text-left flex items-center justify-between transition-all active:scale-[0.99]">
+              <span>${opt}</span>
+              <span class="material-symbols-outlined text-outline text-[16px]">radio_button_unchecked</span>
+            </button>
+          `).join('')}
+        </div>
+
+        <div id="quizExpBox" class="hidden p-2.5 rounded-xl bg-surface-container text-xs text-on-surface border border-outline-variant/40">
+          <span class="font-bold text-primary block mb-0.5">Explanation</span>
+          <p>${q.displayExp}</p>
+        </div>
+
+        <button id="btnNextQuiz" type="button" class="hidden w-full py-3 rounded-full bg-primary text-on-primary text-xs font-bold flex items-center justify-center gap-1 shadow-md active:scale-95">
+          <span>${curIndex === questions.length - 1 ? 'Finish & Claim XP' : 'Next Question'}</span>
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+        </button>
+      </div>
+    `;
+
+    const btns = container.querySelectorAll(".quiz-opt-btn");
+    btns.forEach(btn => {
+      btn.onclick = () => {
+        const selected = parseInt(btn.getAttribute("data-idx"), 10);
+        btns.forEach(b => b.disabled = true);
+
+        if (selected === q.currentAns) {
+          btn.className = "quiz-opt-btn w-full p-3 rounded-xl bg-tertiary-fixed text-tertiary text-xs font-bold text-left flex items-center justify-between";
+          btn.querySelector(".material-symbols-outlined").innerText = "check_circle";
+          score++;
+          showToast("Correct! +10 XP", "check_circle");
+        } else {
+          btn.className = "quiz-opt-btn w-full p-3 rounded-xl bg-error-container text-on-error-container text-xs font-bold text-left flex items-center justify-between";
+          btn.querySelector(".material-symbols-outlined").innerText = "cancel";
+          const correctBtn = btns[q.currentAns];
+          correctBtn.className = "quiz-opt-btn w-full p-3 rounded-xl bg-tertiary-fixed text-tertiary text-xs font-bold text-left flex items-center justify-between";
+          correctBtn.querySelector(".material-symbols-outlined").innerText = "check_circle";
+        }
+
+        document.getElementById("quizExpBox").classList.remove("hidden");
+        document.getElementById("btnNextQuiz").classList.remove("hidden");
+      };
+    });
+
+    document.getElementById("btnNextQuiz").onclick = () => {
+      if (curIndex < questions.length - 1) {
+        curIndex++;
+        renderQuizQuestion();
+      } else {
+        finishActiveGame(score * 10, "Quiz Challenge Completed!", "quiz");
+      }
+    };
+  }
+
+  renderQuizQuestion();
+}
+
+// 11. GAME 2: QUICK MCQ BLITZ (10s TIMER)
+function startQuickMcq() {
+  const container = document.getElementById("gamePlayContainer");
+  container.classList.remove("hidden");
+  document.getElementById("gamesHubContainer").classList.add("hidden");
+
+  const questions = getShuffledQuestionsForSession(App.focusSubject, App.focusChapter, 4);
+  let curIndex = 0;
+  let streak = 0;
+  let gainedXp = 0;
+  let timerId = null;
+  let timeLeft = 10;
+
+  function renderBlitzQuestion() {
+    clearInterval(timerId);
+    timeLeft = 10;
+    const q = questions[curIndex];
+
+    container.innerHTML = `
+      <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1 text-secondary font-bold text-xs">
+            <span class="material-symbols-outlined text-[18px]">bolt</span>
+            <span>Combo x${streak >= 2 ? streak : 1}</span>
+          </div>
+          <div class="flex items-center gap-1 text-primary font-bold text-xs">
+            <span class="material-symbols-outlined text-[16px]">timer</span>
+            <span id="blitzTimeCount">10s</span>
+          </div>
+          <span class="text-xs font-bold text-on-surface">XP: ${gainedXp}</span>
+        </div>
+
+        <div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+          <div id="blitzTimeBar" class="h-full bg-secondary-container rounded-full transition-all duration-1000 ease-linear" style="width: 100%"></div>
+        </div>
+
+        <h3 class="text-sm font-bold text-on-surface leading-snug">${q.displayQ}</h3>
+
+        <div class="flex flex-col gap-2">
+          ${q.currentOpts.map((opt, i) => `
+            <button type="button" data-idx="${i}" class="blitz-opt-tile p-3 rounded-xl bg-surface-container-low text-on-surface text-xs font-semibold text-left flex items-center justify-between active:scale-95 transition-all">
+              <span>${opt}</span>
+              <span class="material-symbols-outlined text-outline text-[16px]">arrow_forward_ios</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    const bar = document.getElementById("blitzTimeBar");
+    const count = document.getElementById("blitzTimeCount");
+
+    timerId = setInterval(() => {
+      timeLeft--;
+      if (count) count.innerText = timeLeft + "s";
+      if (bar) bar.style.width = (timeLeft * 10) + "%";
+      if (timeLeft <= 0) {
+        clearInterval(timerId);
+        streak = 0;
+        showToast("Time's Up!", "timer_off");
+        advanceBlitz();
+      }
+    }, 1000);
+
+    const tiles = container.querySelectorAll(".blitz-opt-tile");
+    tiles.forEach(tile => {
+      tile.onclick = () => {
+        clearInterval(timerId);
+        const sel = parseInt(tile.getAttribute("data-idx"), 10);
+        if (sel === q.currentAns) {
+          streak++;
+          const mult = streak >= 3 ? 3 : (streak >= 2 ? 2 : 1);
+          const pts = 10 * mult;
+          gainedXp += pts;
+          tile.className = "blitz-opt-tile p-3 rounded-xl bg-tertiary-fixed text-tertiary text-xs font-bold text-left";
+          showToast(`Speed Hit! +${pts} XP (x${mult})`, "bolt");
+        } else {
+          streak = 0;
+          tile.className = "blitz-opt-tile p-3 rounded-xl bg-error-container text-on-error-container text-xs font-bold text-left";
+        }
+        setTimeout(advanceBlitz, 600);
+      };
+    });
+  }
+
+  function advanceBlitz() {
+    if (curIndex < questions.length - 1) {
+      curIndex++;
+      renderBlitzQuestion();
+    } else {
+      finishActiveGame(gainedXp, "MCQ Speed Blitz Complete!", "quick_mcq");
+    }
+  }
+
+  renderBlitzQuestion();
+}
+
+// 12. GAME 3: MATCH THE PAIRS (DUAL-COLUMN DRAG/TAP)
+function startMatchPairs() {
+  const container = document.getElementById("gamePlayContainer");
+  container.classList.remove("hidden");
+  document.getElementById("gamesHubContainer").classList.add("hidden");
+
+  const isHin = App.medium === "hindi";
+  const pool = isHin ? MATCH_PAIRS_DATA.hi : MATCH_PAIRS_DATA.en;
+  const picked = cryptoRandomShuffle(pool).slice(0, 4);
+
+  const leftItems = cryptoRandomShuffle(picked.map(p => ({ id: p.id, text: p.left })));
+  const rightItems = cryptoRandomShuffle(picked.map(p => ({ id: p.id, text: p.right })));
+
+  let selectedLeft = null;
+  let matchedIds = [];
+
+  function renderBoard() {
+    container.innerHTML = `
+      <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <button onclick="exitActiveGame()" class="text-xs font-bold text-on-surface-variant flex items-center gap-0.5 active:scale-95" type="button">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            <span>Exit</span>
+          </button>
+          <span class="text-xs font-bold text-on-surface">Match The Pairs</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-tertiary-fixed text-tertiary">
+            ${matchedIds.length} / ${leftItems.length} Matched
+          </span>
+        </div>
+
+        <p class="text-[11px] text-on-surface-variant">Tap a term in Column A, then tap its partner in Column B.</p>
+
+        <div class="grid grid-cols-2 gap-2.5 pt-1">
+          <div class="flex flex-col gap-2">
+            <span class="text-[10px] font-bold text-primary uppercase text-center">Column A</span>
+            ${leftItems.map(item => {
+              const matched = matchedIds.includes(item.id);
+              const active = selectedLeft === item.id;
+              let cls = "p-2.5 rounded-xl text-xs text-center font-bold transition-all ";
+              if (matched) cls += "bg-tertiary-fixed text-tertiary opacity-40 pointer-events-none";
+              else if (active) cls += "bg-primary text-on-primary shadow-sm";
+              else cls += "bg-surface-container-low text-on-surface";
+              return `<button type="button" data-id="${item.id}" class="m-left-btn ${cls}">${item.text}</button>`;
+            }).join('')}
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <span class="text-[10px] font-bold text-secondary uppercase text-center">Column B</span>
+            ${rightItems.map(item => {
+              const matched = matchedIds.includes(item.id);
+              let cls = "p-2.5 rounded-xl text-[11px] text-center font-semibold transition-all ";
+              if (matched) cls += "bg-tertiary-fixed text-tertiary opacity-40 pointer-events-none";
+              else cls += "bg-surface-container-low text-on-surface";
+              return `<button type="button" data-id="${item.id}" class="m-right-btn ${cls}">${item.text}</button>`;
+            }).join('')}
+          </div>
+        </div>
+
+        ${matchedIds.length === leftItems.length ? `
+          <button id="btnFinishMatch" type="button" class="w-full py-3 rounded-full bg-primary text-on-primary font-bold text-xs mt-2 shadow-md active:scale-95 flex items-center justify-center gap-1.5">
+            <span>Claim Match Reward (+30 XP)</span>
+            <span class="material-symbols-outlined text-[16px]">stars</span>
+          </button>
+        ` : ''}
+      </div>
+    `;
+
+    container.querySelectorAll(".m-left-btn").forEach(btn => {
+      btn.onclick = () => {
+        selectedLeft = btn.getAttribute("data-id");
+        renderBoard();
+      };
+    });
+
+    container.querySelectorAll(".m-right-btn").forEach(btn => {
+      btn.onclick = () => {
+        if (!selectedLeft) {
+          showToast("Select Column A first!", "touch_app");
+          return;
+        }
+        const rightId = btn.getAttribute("data-id");
+        if (selectedLeft === rightId) {
+          matchedIds.push(rightId);
+          selectedLeft = null;
+          showToast("Pair Matched! 🌟", "celebration");
+          renderBoard();
+        } else {
+          showToast("Not a match! Try again.", "close");
+        }
+      };
+    });
+
+    if (matchedIds.length === leftItems.length) {
+      document.getElementById("btnFinishMatch").onclick = () => {
+        finishActiveGame(30, "Pair Matching Completed!", "match");
+      };
+    }
+  }
+
+  renderBoard();
+}
+
+// 13. GAME 4: WORD SPELL CHALLENGE
+function startWordChallenge() {
+  const container = document.getElementById("gamePlayContainer");
+  container.classList.remove("hidden");
+  document.getElementById("gamesHubContainer").classList.add("hidden");
+
+  const isHin = App.medium === "hindi";
+  const item = cryptoRandomShuffle(WORDS_DATA)[0];
+  const target = (isHin ? item.word_hi : item.word_en).toUpperCase();
+  const clue = isHin ? item.clue_hi : item.clue_en;
+
+  let currentEntry = [];
+  const chars = target.split('');
+  const decoys = ["X", "P", "T"];
+  const pool = cryptoRandomShuffle([...chars, ...decoys]);
+
+  function renderWordBoard() {
+    container.innerHTML = `
+      <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <button onclick="exitActiveGame()" class="text-xs font-bold text-on-surface-variant flex items-center gap-0.5 active:scale-95" type="button">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            <span>Exit</span>
+          </button>
+          <span class="text-xs font-bold text-on-surface">Word Challenge</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary-fixed text-primary">+25 XP</span>
+        </div>
+
+        <div class="p-3 bg-surface-container-low rounded-xl border border-surface-container flex flex-col gap-1">
+          <span class="text-[10px] font-bold text-primary uppercase">Clue</span>
+          <p class="text-xs font-bold text-on-surface">${clue}</p>
+        </div>
+
+        <div class="flex items-center justify-center gap-1.5 py-2 flex-wrap">
+          ${target.split('').map((_, i) => `
+            <div class="w-9 h-11 rounded-xl bg-surface-container flex items-center justify-center text-sm font-bold text-primary border-b-2 border-b-primary">
+              ${currentEntry[i] || ''}
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="flex items-center justify-center gap-2 py-1 flex-wrap">
+          ${pool.map(c => `
+            <button type="button" data-char="${c}" class="w-10 h-10 rounded-xl bg-primary text-on-primary font-bold text-sm flex items-center justify-center shadow-sm active:scale-95 tile-btn">
+              ${c}
+            </button>
+          `).join('')}
+        </div>
+
+        <div class="flex items-center justify-center gap-2 pt-1">
+          <button id="btnWordBack" type="button" class="px-3 py-1.5 rounded-full bg-surface-container text-xs font-bold text-on-surface flex items-center gap-1 active:scale-95">
+            <span class="material-symbols-outlined text-[14px]">backspace</span>
+            <span>Backspace</span>
+          </button>
+          <button id="btnWordClear" type="button" class="px-3 py-1.5 rounded-full bg-surface-container text-xs font-bold text-on-surface active:scale-95">
+            Clear
+          </button>
+        </div>
+      </div>
+    `;
+
+    container.querySelectorAll(".tile-btn").forEach(btn => {
+      btn.onclick = () => {
+        if (currentEntry.length < target.length) {
+          currentEntry.push(btn.getAttribute("data-char"));
+          checkWord();
+        }
+      };
+    });
+
+    document.getElementById("btnWordBack").onclick = () => {
+      currentEntry.pop();
+      renderWordBoard();
+    };
+
+    document.getElementById("btnWordClear").onclick = () => {
+      currentEntry = [];
+      renderWordBoard();
+    };
+  }
+
+  function checkWord() {
+    renderWordBoard();
+    if (currentEntry.length === target.length) {
+      if (currentEntry.join('') === target) {
+        showToast("Word Unscrambled! 🏆", "celebration");
+        setTimeout(() => finishActiveGame(25, "Word Master Complete!", "word"), 700);
+      } else {
+        showToast("Incorrect spelling! Try again.", "close");
+      }
+    }
+  }
+
+  renderWordBoard();
+}
+
+// 14. GAME 5: DAILY QUEST
+function startDailyChallenge() {
+  const container = document.getElementById("gamePlayContainer");
+  container.classList.remove("hidden");
+  document.getElementById("gamesHubContainer").classList.add("hidden");
+
+  // Dynamic multi-subject questions
+  const questions = getShuffledQuestionsForSession("all", "all", 3);
+  let step = 0;
+
+  function renderDailyStep() {
+    const q = questions[step];
+    container.innerHTML = `
+      <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary-fixed text-secondary">
+            Daily Task ${step + 1} of 3
+          </span>
+          <span class="text-xs font-bold text-tertiary-fixed">+50 XP Total</span>
+        </div>
+
+        <h3 class="text-sm font-bold text-on-surface leading-snug">${q.displayQ}</h3>
+
+        <div class="flex flex-col gap-2">
+          ${q.currentOpts.map((opt, i) => `
+            <button type="button" data-idx="${i}" class="daily-opt-btn w-full p-3 rounded-xl bg-surface-container-low text-on-surface text-xs font-semibold text-left flex items-center justify-between active:scale-[0.99]">
+              <span>${opt}</span>
+              <span class="material-symbols-outlined text-outline text-[16px]">check_circle_outline</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    container.querySelectorAll(".daily-opt-btn").forEach(btn => {
+      btn.onclick = () => {
+        const sel = parseInt(btn.getAttribute("data-idx"), 10);
+        if (sel === q.currentAns) {
+          showToast("Task Passed! 🌟", "verified");
+          if (step < 2) {
+            step++;
+            setTimeout(renderDailyStep, 500);
+          } else {
+            finishActiveGame(50, "Daily Challenge Completed!", "daily");
+          }
+        } else {
+          showToast("Try again!", "close");
+        }
+      };
+    });
+  }
+
+  renderDailyStep();
+}
+
+// 15. COMPLETION & RESTART MODAL
+function finishActiveGame(earnedXp, msg, gameType) {
+  App.xp += earnedXp;
+  saveApp();
+  renderUI();
+
+  const container = document.getElementById("gamePlayContainer");
+  container.innerHTML = `
+    <div class="bg-surface-container-lowest p-5 rounded-2xl shadow-sm border border-surface-container flex flex-col items-center text-center gap-3">
+      <div class="w-14 h-14 rounded-2xl bg-secondary-fixed flex items-center justify-center text-secondary">
+        <span class="material-symbols-outlined text-[36px]">celebration</span>
+      </div>
+      <h3 class="text-base font-bold text-on-surface">${msg}</h3>
+      <p class="text-xs text-on-surface-variant">You earned <span class="font-bold text-primary">+${earnedXp} XP</span>!</p>
+
+      <div class="flex items-center gap-2 w-full pt-2">
+        <button onclick="launchGameEngine('${gameType}')" class="flex-1 py-3 rounded-full bg-primary text-on-primary font-bold text-xs shadow-sm active:scale-95 flex items-center justify-center gap-1" type="button">
+          <span class="material-symbols-outlined text-[16px]">replay</span>
+          <span>Play Again (New Questions)</span>
+        </button>
+        <button onclick="exitActiveGame()" class="flex-1 py-3 rounded-full bg-surface-container text-on-surface font-bold text-xs active:scale-95" type="button">
+          Exit to Arcade
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+// Run on initial load
+window.addEventListener("DOMContentLoaded", initApp);
+</script>
+
+</body>
+</html>
